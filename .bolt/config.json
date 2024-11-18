@@ -1,0 +1,55 @@
+{
+  "name": "simplymaid",
+  "version": "0.1.0",
+  "nextjs": {
+    "version": "15.0.3",
+    "strict": true,
+    "features": {
+      "parallelRoutes": true,
+      "serverActions": true,
+      "serverComponents": true
+    }
+  },
+  "typescript": {
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "dependencies": {
+    "required": {
+      "next": "15.0.3",
+      "react": "18.2.0",
+      "react-dom": "18.2.0",
+      "@supabase/ssr": "^0.0.10",
+      "@tanstack/react-query": "^5.17.9",
+      "drizzle-orm": "^0.29.1"
+    }
+  },
+  "routing": {
+    "groups": [
+      {
+        "name": "auth",
+        "pattern": "(auth)/*",
+        "middleware": ["auth"]
+      },
+      {
+        "name": "marketing",
+        "pattern": "(marketing)/*",
+        "static": true
+      },
+      {
+        "name": "booking",
+        "pattern": "(booking)/*",
+        "parallel": ["modal", "summary"]
+      },
+      {
+        "name": "dashboard",
+        "pattern": "(dashboard)/*",
+        "middleware": ["auth"],
+        "parallel": ["modal"]
+      }
+    ]
+  }
+}

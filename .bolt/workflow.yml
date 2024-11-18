@@ -1,0 +1,42 @@
+name: Next.js 15 Workflow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: 18
+  NEXT_VERSION: 15.0.3
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Verify Next.js version
+        run: |
+          PACKAGE_NEXT_VERSION=$(node -p "require('./package.json').dependencies.next")
+          if [ "$PACKAGE_NEXT_VERSION" != "^$NEXT_VERSION" ]; then
+            echo "Next.js version must be $NEXT_VERSION"
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Type check
+        run: npm run type-check
+        
+      - name: Lint
+        run: npm run lint
+        
+      - name: Build
+        run: npm run build
